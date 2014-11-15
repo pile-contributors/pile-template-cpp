@@ -1,0 +1,104 @@
+/* ========================================================================= */
+/* ------------------------------------------------------------------------- */
+/*!
+  \file         tempile-config.h
+  \date         June 2014
+  \author       Nicu Tofan
+
+*/
+/* ------------------------------------------------------------------------- */
+/* ========================================================================= */
+#ifndef TEMPILE_CONFIG_H_INCLUDE
+#define TEMPILE_CONFIG_H_INCLUDE
+
+//
+//
+//
+//
+/*  INCLUDES    ------------------------------------------------------------ */
+
+/*  INCLUDES    ============================================================ */
+//
+//
+//
+//
+/*  DEFINITIONS    --------------------------------------------------------- */
+
+//! the name of this project
+#define TEMPILE_PROJECT_NAME       "@TEMPILE_NAME@"
+
+//! major version (ABI not preserved between these)
+#define TEMPILE_MAJOR_VERSION      (@TEMPILE_MAJOR_VERSION@)
+
+//! minor version; ABI is preserved
+#define TEMPILE_MINOR_VERSION      (@TEMPILE_MINOR_VERSION@
+
+//! bug fixes
+#define TEMPILE_PATCH_VERSION      (@TEMPILE_PATCH_VERSION@)
+
+//! the version ans a 32-bit integer
+#define TEMPILE_VERSION            (\
+    TEMPILE_MAJOR_VERSION * 0x100000 + \
+    TEMPILE_MINOR_VERSION * 0x1000 + \
+    TEMPILE_PATCH_VERSION * 0x1)
+
+//! version as a string
+#define TEMPILE_VERSION_STRING     "@TEMPILE_VERSION_STRING@"
+
+//! when it was build (UTC)
+#define TEMPILE_BUILD_TIME         "@TEMPILE_BUILD_TIME@"
+
+
+//! debug or not
+#ifndef TEMPILE_DEBUG
+#ifdef TEMPILE_FORCE_DEBUG
+#define TEMPILE_DEBUG 1
+#else
+#cmakedefine TEMPILE_DEBUG
+#endif
+#endif
+
+
+//! static version
+#cmakedefine TEMPILE_STATIC
+//! pile version - the user decides
+#cmakedefine TEMPILE_PILE
+// shared version
+// TEMPILE_SHARED is defined when building the project
+// and undefined when a file from another project
+// imports the file
+
+
+// Take the export or inport form depending on who's asking
+#if defined(TEMPILE_STATIC)
+#   define      TEMPILE_EXPORT
+#elif defined(TEMPILE_PILE)
+#   define      TEMPILE_EXPORT      @TEMPILE_EXPORT@
+#elif defined(TEMPILE_SHARED)
+#   define      TEMPILE_EXPORT      Q_DECL_EXPORT
+#else
+#   define      TEMPILE_EXPORT      Q_DECL_IMPORT
+#endif
+
+/*  DEFINITIONS    ========================================================= */
+//
+//
+//
+//
+/*  DATA    ---------------------------------------------------------------- */
+
+/*  DATA    ================================================================ */
+//
+//
+//
+//
+/*  FUNCTIONS    ----------------------------------------------------------- */
+
+/*  FUNCTIONS    =========================================================== */
+//
+//
+//
+//
+/* ------------------------------------------------------------------------- */
+/* ========================================================================= */
+#endif /* TEMPILE_CONFIG_H_INCLUDE */
