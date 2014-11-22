@@ -4,48 +4,58 @@
 # ------------
 # 
 # This file is the main file for the tempile-helpers. The project follows 
-# the pattern laid out at http://tnick.github.io/ideas/2014/05/24/micromodules.html
+# the pattern laid out at http://pile-contributors.github.io/
 # for a `pile-helpers` repository.
 #
 # Usage
 # -----
 # 
+# You can use the resources in this project to understand this pile,
+# to use it as a model for your own piles or to improve and test this pile.
+#
+# The project has an optional dependency on Qt5 library. If found,
+# the tempile pile will use the definitions for shared libraries.
+#
 # ============================================================================
 
-project(tempile-helpers)
+set (PROJECT_NAME "tempile-helpers")
+
+project(${PROJECT_NAME})
 cmake_minimum_required(VERSION 2.8.11)
+enable_testing()
 
-# make sure we find support modules
-list (APPEND CMAKE_MODULE_PATH 
-   "${CMAKE_SOURCE_DIR}/cmake/"
-   "${CMAKE_SOURCE_DIR}/tempile-src/cmake/")
-include(tempile)
+option( INCLUDE_PILE_SOURCES_DIRECTLY
+        "Use internal tempile as a pile (ON) or as a library (OFF)"
+        OFF)
 
-# how to use it
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# including the sources directly
-tempileInit (PILE)
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY
+    "${PROJECT_BINARY_DIR}/build/bin" )
+set( EXECUTABLE_OUTPUT_PATH
+    "${PROJECT_BINARY_DIR}/build/bin" )
+set( LIBRARY_OUTPUT_PATH
+    "${PROJECT_BINARY_DIR}/build/lib" )
 
-# creating a library out of our source
-add_subdirectory(tempile-src)
+include_directories(
+    "${CMAKE_CURRENT_BINARY_DIR}"
+    "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# copy all headers to build/include/tempile
-message(STATUS ${TEMPILE_HEADERS})
-add_custom_target(
-    copy_tempile_headers ALL
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/build/include/tempile"
-    COMMENT "MsgPile headers are being copied"
-    VERBATIM
-    DEPENDS tempile)
-foreach (iter_h ${TEMPILE_HEADERS})
-    get_filename_component (iter_h_name ${iter_h} NAME)
-    add_custom_command (
-        TARGET copy_tempile_headers
-        PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${iter_h}" "${CMAKE_BINARY_DIR}/build/include/tempile/${iter_h_name}")
-endforeach (iter_h ${TEMPILE_HEADERS})
+find_package(Qt5 COMPONENTS Core)
+if(Qt5Core_FOUND)
+    include_directories(
+         ${Qt5Core_INCLUDE_DIRS})
+endif()
 
-add_subdirectory(live-test)
+if(INCLUDE_PILE_SOURCES_DIRECTLY)
+    include(pile_support)
+    pileInclude (TemPile)
+    tempileInit(PILE)
+else()
+    set (TEMPILE_BUILD_MODE SHARED)
+    add_subdirectory(tempile)
+endif()
 
+add_subdirectory(tests)
 
 # ============================================================================
