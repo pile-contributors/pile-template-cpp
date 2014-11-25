@@ -4,4 +4,4 @@ endif ()
 
 include(pile_support)
 pileInclude (TemPile)
-refCntInit(${TEMPILE_BUILD_MODE})
+tempileInit(${TEMPILE_BUILD_MODE})
