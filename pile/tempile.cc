@@ -1,13 +1,13 @@
 /**
  * @file tempile.cc
- * @brief Definitions for Example class.
+ * @brief Definitions for TemPile class.
  * @author 
  * @copyright Copyright 2014 piles contributors. All rights reserved.
  * This file is released under the
  * [MIT License](http://opensource.org/licenses/mit-license.html)
  */
 
-#include <tempile/tempile.h>
+#include "tempile.h"
 #include "tempile-private.h"
 
 /**
